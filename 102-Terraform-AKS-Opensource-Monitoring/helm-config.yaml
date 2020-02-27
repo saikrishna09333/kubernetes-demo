@@ -1,0 +1,50 @@
+# This file contains the essential configs for the ingress controller helm chart
+
+# Verbosity level of the App Gateway Ingress Controller
+verbosityLevel: 3
+
+################################################################################
+# Specify which application gateway the ingress controller will manage
+#
+appgw:
+    subscriptionId: 4d6a8172-06bd-487f-b993-bbe6a2fcc50d
+    resourceGroup: azure-k8stest
+    name: testsample
+    usePrivateIP: false
+
+    # Setting appgw.shared to "true" will create an AzureIngressProhibitedTarget CRD.
+    # This prohibits AGIC from applying config for any host/path.
+    # Use "kubectl get AzureIngressProhibitedTargets" to view and change this.
+    shared: false
+
+################################################################################
+# Specify which kubernetes namespace the ingress controller will watch
+# Default value is "default"
+# Leaving this variable out or setting it to blank or empty string would
+# result in Ingress Controller observing all acessible namespaces.
+#
+# kubernetes:
+#   watchNamespace: <namespace>
+
+################################################################################
+# Specify the authentication with Azure Resource Manager
+#
+# Two authentication methods are available:
+# - Option 1: AAD-Pod-Identity (https://github.com/Azure/aad-pod-identity)
+#armAuth:
+#    type: aadPodIdentity
+#    identityResourceID: <identityResourceId>
+#    identityClientID:  <identityClientId>
+
+## Alternatively you can use Service Principal credentials
+armAuth:
+  type: servicePrincipal
+  secretJSON: ew0KICAiY2xpZW50SWQiOiAiMDRlZmE1YmUtMDgyNi00MGMyLWE3NzQtYzdlMzk4NmQ3ZjQ5IiwNCiAgImNsaWVudFNlY3JldCI6ICI1ZDQ3OTJhMS04YjA5LTQ5NjUtODk0MS00MzI3YzE1NmE1NDUiLA0KICAic3Vic2NyaXB0aW9uSWQiOiAiNGQ2YTgxNzItMDZiZC00ODdmLWI5OTMtYmJlNmEyZmNjNTBkIiwNCiAgInRlbmFudElkIjogIjMwYmY5ZjM3LWQ1NTAtNDg3OC05NDk0LTEwNDE2NTZjYWYyNyIsDQogICJhY3RpdmVEaXJlY3RvcnlFbmRwb2ludFVybCI6ICJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20iLA0KICAicmVzb3VyY2VNYW5hZ2VyRW5kcG9pbnRVcmwiOiAiaHR0cHM6Ly9tYW5hZ2VtZW50LmF6dXJlLmNvbS8iLA0KICAiYWN0aXZlRGlyZWN0b3J5R3JhcGhSZXNvdXJjZUlkIjogImh0dHBzOi8vZ3JhcGgud2luZG93cy5uZXQvIiwNCiAgInNxbE1hbmFnZW1lbnRFbmRwb2ludFVybCI6ICJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldDo4NDQzLyIsDQogICJnYWxsZXJ5RW5kcG9pbnRVcmwiOiAiaHR0cHM6Ly9nYWxsZXJ5LmF6dXJlLmNvbS8iLA0KICAibWFuYWdlbWVudEVuZHBvaW50VXJsIjogImh0dHBzOi8vbWFuYWdlbWVudC5jb3JlLndpbmRvd3MubmV0LyINCn0NCg==
+################################################################################
+# Specify if the cluster is RBAC enabled or not
+rbac:
+    enabled: false # true/false
+
+# Specify aks cluster related information. THIS IS BEING DEPRECATED.
+aksClusterConfiguration:
+    apiServerAddress: <aks-api-server-address>
